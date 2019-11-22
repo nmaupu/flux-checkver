@@ -2,7 +2,7 @@ BIN=bin
 BIN_NAME=flux-checkver
 IMAGE_NAME ?= flux-checkver
 IMAGE_VERSION = 1.0.0
-IMAGE_REMOTE_NAME ?= nmaupu/$(IMAGE_REMOTE_NAME):$(IMAGE_VERSION)
+IMAGE_REMOTE_NAME ?= nmaupu/$(IMAGE_NAME):$(IMAGE_VERSION)
 
 .PHONY: all
 all: build
@@ -44,7 +44,7 @@ update-vendor:
 	export GO111MODULE=on && go mod vendor
 
 .PHONY: image-build
-image-build:
+image-build: build-x86_64
 	docker build -f Dockerfile.minideb -t $(IMAGE_NAME) .
 
 image-tag: image-build
