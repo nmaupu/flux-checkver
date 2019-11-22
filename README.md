@@ -1,3 +1,3 @@
 # What is flux-checkver ?
 
-flux-checkver is a tool to check for new image versions deployed with Weave Flux.
+flux-checkver is a tool to check for new image versions deployed with Weave Flux in a Kubernetes cluster and provides output as prometheus metrics.
