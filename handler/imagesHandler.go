@@ -54,7 +54,7 @@ func (fc FluxConfig) Handle(w http.ResponseWriter, r *http.Request) {
 	var ret interface{}
 	imagesStatus, err := fc.CallFluxApiImages()
 	if err != nil {
-		log.Errorf("An error occured fetching Flux api: %+v\n", err)
+		log.Errorf("An error occurred fetching Flux api: %+v\n", err)
 		ret = err
 	} else {
 		ret = imagesStatus
@@ -105,7 +105,7 @@ func (fc FluxConfig) FluxExporterRunner(interval int) {
 			// Call Flux API and get images status
 			imagesStatus, err := fc.CallFluxApiImages()
 			if err != nil {
-				log.Errorf("An error occured fetching from Flux api: %+v\n", err)
+				log.Errorf("An error occurred fetching from Flux api: %+v\n", err)
 			} else {
 				for _, is := range imagesStatus {
 					for _, c := range is.Containers {
