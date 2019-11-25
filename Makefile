@@ -44,7 +44,9 @@ update-vendor:
 	export GO111MODULE=on && go mod vendor
 
 .PHONY: image-build
-image-build: build-x86_64
+image-build: $(BIN)
+	curl -SsL -o bin/flux-checkver_linux-amd64 https://github.com/nmaupu/flux-checkver/releases/download/$(IMAGE_VERSION)/flux-checkver_linux-amd64
+	chmod +x bin/flux-checkver_linux-amd64
 	docker build -f Dockerfile.minideb -t $(IMAGE_NAME) .
 
 image-tag: image-build
