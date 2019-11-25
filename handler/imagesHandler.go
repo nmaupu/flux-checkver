@@ -175,7 +175,7 @@ func (fc FluxConfig) FluxExporterRunner(interval int) {
 						labelValues["most_recent_version"] = mostRecentVersionStr
 						labelValues["more_recent_versions"] = strings.Join(moreRecentVersions, ",")
 
-						fluxImageStatusGauge.With(labelValues).Set(float64(newImagesCount))
+						fluxImageStatusGauge.With(labelValues).Set(float64(len(moreRecentVersions)))
 					}
 				}
 			}
