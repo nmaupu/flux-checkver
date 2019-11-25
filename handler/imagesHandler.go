@@ -144,9 +144,9 @@ func (fc FluxConfig) FluxExporterRunner(interval int) {
 						for _, avail := range c.Available {
 							// Get only semver versions
 							candidatVersion := avail.ID.Tag
-							_, err := semver.NewVersion(candidatVersion)
+							candidatVersionSemver, err := semver.NewVersion(candidatVersion)
 							if err == nil {
-								availableVersions = append(availableVersions, candidatVersion)
+								availableVersions = append(availableVersions, candidatVersionSemver.String())
 							} else {
 								log.Debugf("image=%s, available candidate version %s cannot be parsed, ignoring.", name, candidatVersion)
 							}
@@ -156,7 +156,7 @@ func (fc FluxConfig) FluxExporterRunner(interval int) {
 						moreRecentVersions := make([]string, 0)
 						moreRecentVersionsSemver := make([]*semver.Version, 0)
 						mostRecentVersionStr := ""
-						_, err := semver.NewVersion(currentVersion)
+						currentVersionSemver, err := semver.NewVersion(currentVersion)
 						if err != nil {
 							// our current version is not semver so we are not comparing anything
 							log.Debugf("Current version %s is not semver. Ignoring available versions comparison.", currentVersion)
@@ -173,7 +173,7 @@ func (fc FluxConfig) FluxExporterRunner(interval int) {
 								}
 
 								if constraint.Check(versionSemver) {
-									moreRecentVersions = append(moreRecentVersions, ver)
+									moreRecentVersions = append(moreRecentVersions, versionSemver.String())
 									// Also creating a semver slice for later use
 									moreRecentVersionsSemver = append(moreRecentVersionsSemver, versionSemver)
 								}
@@ -198,7 +198,7 @@ func (fc FluxConfig) FluxExporterRunner(interval int) {
 						labelValues["resource_type"] = resourceType
 						labelValues["resource_name"] = resourceName
 						labelValues["repo_name"] = repoName
-						labelValues["current_version"] = currentVersion
+						labelValues["current_version"] = currentVersionSemver.String()
 						labelValues["available_versions"] = strings.Join(availableVersions, ",")
 						labelValues["available_images_count"] = strconv.Itoa(availableImagesCount)
 						labelValues["created_at"] = strconv.FormatInt(c.Current.CreatedAt.Unix(), 10)
