@@ -6,5 +6,6 @@ RUN apt-get update && \
     update-ca-certificates && \
     apt-get clean
 
+USER www-data
 COPY bin/flux-checkver-x86_64 /flux-checkver
 ENTRYPOINT ["/flux-checkver"]
