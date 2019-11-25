@@ -27,6 +27,7 @@ var (
 		"resource_namespace",
 		"resource_type",
 		"resource_name",
+		"repo_name",
 		"current_version",
 		"available_versions",
 		"available_images_count",
@@ -136,6 +137,7 @@ func (fc FluxConfig) FluxExporterRunner(interval int) {
 					for _, c := range is.Containers {
 						name := c.Name
 						currentVersion := c.Current.ID.Tag
+						repoName := c.Current.ID.Name.String()
 
 						// Get all available versions
 						var availableVersions = make([]string, 0)
@@ -187,14 +189,15 @@ func (fc FluxConfig) FluxExporterRunner(interval int) {
 						availableImagesCount := c.AvailableImagesCount
 						newImagesCount := c.NewAvailableImagesCount
 
-						log.Debugf("Image=%s, Namespace=%s, CurrentVersion=%s, AvailableImagesCount=%d, NewImagesCount=%d\n",
-							name, resourceNamespace, currentVersion, availableImagesCount, newImagesCount)
+						log.Debugf("Image=%s, repoName=%s, resourceType=%s, resourceName=%s, Namespace=%s, CurrentVersion=%s, AvailableImagesCount=%d, NewImagesCount=%d\n",
+							name, repoName, resourceType, resourceName, resourceNamespace, currentVersion, availableImagesCount, newImagesCount)
 
 						labelValues := prometheus.Labels{}
 						labelValues["name"] = name
 						labelValues["resource_namespace"] = resourceNamespace
 						labelValues["resource_type"] = resourceType
 						labelValues["resource_name"] = resourceName
+						labelValues["repo_name"] = repoName
 						labelValues["current_version"] = currentVersion
 						labelValues["available_versions"] = strings.Join(availableVersions, ",")
 						labelValues["available_images_count"] = strconv.Itoa(availableImagesCount)

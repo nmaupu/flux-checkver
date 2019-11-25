@@ -1,7 +1,8 @@
 BIN=bin
 BIN_NAME=flux-checkver
+RELEASE_DIR=release
 IMAGE_NAME ?= flux-checkver
-IMAGE_VERSION = 1.0.4
+IMAGE_VERSION = 1.0.5
 IMAGE_REMOTE_NAME ?= nmaupu/$(IMAGE_NAME):$(IMAGE_VERSION)
 
 .PHONY: all
@@ -34,7 +35,7 @@ test:
 	go test `go list ./... | grep -v /vendor/`
 
 $(BIN):
-	mkdir -p $(BIN)
+	mkdir -p $(BIN)/$(RELEASE_DIR)
 
 vendor:
 	export GO111MODULE=on && go mod vendor
@@ -45,8 +46,8 @@ update-vendor:
 
 .PHONY: image-build
 image-build: $(BIN)
-	curl -SsL -o bin/flux-checkver_linux-amd64 https://github.com/nmaupu/flux-checkver/releases/download/$(IMAGE_VERSION)/flux-checkver_linux-amd64
-	chmod +x bin/flux-checkver_linux-amd64
+	curl -SsL -o $(BIN)/$(RELEASE_DIR)/flux-checkver https://github.com/nmaupu/flux-checkver/releases/download/$(IMAGE_VERSION)/flux-checkver_linux-amd64
+	chmod +x $(BIN)/$(RELEASE_DIR)/flux-checkver
 	docker build -f Dockerfile.minideb -t $(IMAGE_NAME) .
 
 image-tag: image-build

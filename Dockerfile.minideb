@@ -7,5 +7,5 @@ RUN apt-get update && \
     apt-get clean
 
 USER www-data
-COPY bin/flux-checkver-x86_64 /flux-checkver
+COPY bin/release/flux-checkver /flux-checkver
 ENTRYPOINT ["/flux-checkver"]
