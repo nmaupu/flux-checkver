@@ -69,7 +69,7 @@ func server(cmd *cli.Cmd) {
 		router.HandleFunc("/images", fluxConfig.Handle)
 		router.Handle("/metrics", promhttp.Handler())
 
-		log.Infof("Listening on %s:%d\n", *bind, *port)
+		log.Infof("Listening on %s:%d", *bind, *port)
 		err := http.ListenAndServe(fmt.Sprintf("%s:%d", *bind, *port), router)
 		if err != nil {
 			log.Fatalf("Error listening: %+v\n", err.Error())

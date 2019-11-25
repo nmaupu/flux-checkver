@@ -157,10 +157,12 @@ func (fc FluxConfig) FluxExporterRunner(interval int) {
 						moreRecentVersionsSemver := make([]*semver.Version, 0)
 						mostRecentVersionStr := ""
 						currentVersionSemver, err := semver.NewVersion(currentVersion)
+						currentVersionStr := currentVersion
 						if err != nil {
 							// our current version is not semver so we are not comparing anything
 							log.Debugf("Current version %s is not semver. Ignoring available versions comparison.", currentVersion)
 						} else {
+							currentVersionStr = currentVersionSemver.String()
 							// Creating constraint to check our current version against others
 							// As current version has already been checked, constraint should never fail to parse
 							constraint, _ := semver.NewConstraint(fmt.Sprintf("> %s", currentVersion))
@@ -198,7 +200,7 @@ func (fc FluxConfig) FluxExporterRunner(interval int) {
 						labelValues["resource_type"] = resourceType
 						labelValues["resource_name"] = resourceName
 						labelValues["repo_name"] = repoName
-						labelValues["current_version"] = currentVersionSemver.String()
+						labelValues["current_version"] = currentVersionStr
 						labelValues["available_versions"] = strings.Join(availableVersions, ",")
 						labelValues["available_images_count"] = strconv.Itoa(availableImagesCount)
 						labelValues["created_at"] = strconv.FormatInt(c.Current.CreatedAt.Unix(), 10)
