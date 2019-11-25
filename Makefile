@@ -1,7 +1,7 @@
 BIN=bin
 BIN_NAME=flux-checkver
 IMAGE_NAME ?= flux-checkver
-IMAGE_VERSION = 1.0.2
+IMAGE_VERSION = 1.0.3
 IMAGE_REMOTE_NAME ?= nmaupu/$(IMAGE_NAME):$(IMAGE_VERSION)
 
 .PHONY: all
