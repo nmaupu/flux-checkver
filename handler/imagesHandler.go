@@ -25,6 +25,8 @@ var (
 	imageMetricLabels         = []string{
 		"name",
 		"resource_namespace",
+		"resource_type",
+		"resource_name",
 		"current_version",
 		"available_versions",
 		"available_images_count",
@@ -109,11 +111,25 @@ func (fc FluxConfig) FluxExporterRunner(interval int) {
 				log.Errorf("An error occurred fetching from Flux api: %+v\n", err)
 			} else {
 				for _, is := range imagesStatus {
-					// Get namespace
+					// Parsing based on https://github.com/fluxcd/flux/blob/master/pkg/resource/id.go#L50
+					// Parse namespace
 					toks := strings.Split(is.ID.String(), ":")
 					resourceNamespace := ""
 					if toks != nil && len(toks) > 0 {
 						resourceNamespace = toks[0]
+					}
+					// Parse resource type
+					resourceType := ""
+					resourceName := ""
+					if toks != nil && len(toks) > 1 {
+						toks = strings.Split(toks[1], "/")
+
+						if len(toks) > 0 {
+							resourceType = toks[0]
+						}
+						if len(toks) > 1 {
+							resourceName = toks[1]
+						}
 					}
 
 					// Browse all containers
@@ -177,6 +193,8 @@ func (fc FluxConfig) FluxExporterRunner(interval int) {
 						labelValues := prometheus.Labels{}
 						labelValues["name"] = name
 						labelValues["resource_namespace"] = resourceNamespace
+						labelValues["resource_type"] = resourceType
+						labelValues["resource_name"] = resourceName
 						labelValues["current_version"] = currentVersion
 						labelValues["available_versions"] = strings.Join(availableVersions, ",")
 						labelValues["available_images_count"] = strconv.Itoa(availableImagesCount)
